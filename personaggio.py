@@ -9,12 +9,12 @@ def collision_test(rect, tiles):
             hit_list.append(tile)
     return hit_list
 
-class Steve:
+class Pica:
     def __init__(self,display,pos,sfondo)->None:
         self.display=display
         self.sfondo = sfondo
         self.size = sfondo.wtile, sfondo.htile
-        self.image=pygame.image.load('image/pokemon.png')
+        self.image=pygame.image.load('image/pica.png')
         self.image = pygame.transform.scale(self.image, self.size)
         self.rect = pygame.Rect(pos[0], pos[1], self.image.get_width(), self.image.get_height())
         self.vel=[0,0]
@@ -24,6 +24,7 @@ class Steve:
         self.veloriz=5
         self.max_vel_caduta=5
         self.falling=False
+        
     
     def movesteve(self):
         keys=pygame.key.get_pressed()
@@ -65,16 +66,6 @@ class Steve:
             if self.vel[0] < 0:
                 self.rect.left = tile.right
                 collision_types['left'] = True
-
-        # muovo in verticale
-        self.vel[1] += self.gravita
-        if self.vel[1] > self.max_vel_caduta:
-            self.vel[1] = self.max_vel_caduta
-        self.rect.y += self.vel[1]
-
-
-        hit_list = collision_test(self.rect, self.sfondo.griglia)
-        for tile in hit_list:
             # muovo in basso
             if self.vel[1] > 0:
                 self.rect.bottom = tile.top
@@ -84,14 +75,19 @@ class Steve:
                 self.rect.top = tile.bottom
                 collision_types['top'] = True
                 self.vel[1] = 0
+        # muovo in verticale
+        self.vel[1] += self.gravita
+        if self.vel[1] > self.max_vel_caduta:
+            self.vel[1] = self.max_vel_caduta
+        self.rect.y += self.vel[1]
+            
 
         # devo controllare anche se esco dallo schermo di lato (potrei inventare un modo con dei rect che formano il bordo)
         if self.rect.left < 0:
             self.rect.left = 0 
         if self.rect.right > self.display.get_width():
             self.rect.right = self.display.get_width()
-
-        
+    
 
     def draw(self):
         self.display.blit(self.image,self.rect)

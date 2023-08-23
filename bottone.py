@@ -2,12 +2,16 @@ import pygame
 from pygame.locals import*
 
 class Button():
-	def __init__(self,display, x, y, img):
+	def __init__(self,display, posx,posy,img,x,y):
 		self.img = img
+		self.posx=posx
+		self.posy=posy
+		self.x=x
+		self.y=y
 		self.display = display
-		self.rect = self.img.get_rect()
-		self.rect.x = x
-		self.rect.y = y
+		self.rect = pygame.Rect(self.posx,self.posy,self.x,self.y)
+		
+		
 		self.clicked = False
 
 	def drawbutton(self):
