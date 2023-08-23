@@ -3,6 +3,7 @@ from pygame.locals import*
 from personaggio import Steve
 from sfondo import Platform
 from bottone import Button
+from oggetti import Object
 
 pygame.init()
 #creo schermo
@@ -30,24 +31,24 @@ bottoneexit=Button(display,480,200,exit_img)
 #creo personaggio e sfondo
 sfondo=Platform(display)
 steve=Steve(display,(100,100),sfondo)
+
+#creo oggetti che cadono
+fragola=Object(display,sfondo,'image/fragola.png')
+
 game=True
 run=True
 while run:
     clock.tick(60)
     display.fill((202,228,241))
 
-    if game:
+    if game==True:
         
         if bottonestart.drawbutton():
-            print('ok')
+            game=False
         if bottoneexit.drawbutton():
             run=False
     
-    for event in pygame.event.get():
-        if event.type==QUIT:
-            pygame.quit()
-            sys.exit()
-
+    
     
     else:
         #disegno sfondo
@@ -56,6 +57,13 @@ while run:
         #faccio muovere il personaggio
         steve.movesteve()
         steve.draw()
+        
+        fragola.moveobj()
+        fragola.drawobj()
+    for event in pygame.event.get():
+        if event.type==QUIT:
+            pygame.quit()
+            sys.exit()
 
     surf = pygame.transform.scale(display, window_size)
     screen.blit(surf, (0,0))
