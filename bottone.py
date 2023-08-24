@@ -32,5 +32,4 @@ class Button():
 
 		#draw button
 		self.display.blit(self.img, self.rect)
-
 		return go
