@@ -21,7 +21,6 @@ fps=60
 
 #creo scritte
 
-
 #scarico immagini x bottoni
 start_img=pygame.image.load('image/start.png')
 start_img=pygame.transform.scale(start_img,(200,200))
@@ -44,7 +43,7 @@ bottonestart=Button(display,160,200,start_img,200,200)
 bottonequit=Button(display,480,200,quit_img,200,200)
 bottoneplay=Button(display,100,480,play_img,200,200)
 bottonepause=Button(display,500,480,pause_img,200,200)
-bottonegameover=Button(display,200,200,gameover_img,600,300)
+bottonegameover=Button(display,300,200,gameover_img,600,300)
 
 
 #creo sfondo
