@@ -20,7 +20,13 @@ fps=60
 #aggiungo musica
 
 #creo scritte
+font=pygame.font.SysFont('Arial 93',70)
+font_score=pygame.font.SysFont('Arial 93',70)
 
+def draw_text(text,font,text_col,x,y):
+	img=font.render(text,True,text_col)
+	screen.blit(img,(x,y))
+white=(255,255,255)
 #scarico immagini x bottoni
 start_img=pygame.image.load('image/start.png')
 start_img=pygame.transform.scale(start_img,(200,200))
@@ -43,7 +49,7 @@ bottonestart=Button(display,160,200,start_img,200,200)
 bottonequit=Button(display,480,200,quit_img,200,200)
 bottoneplay=Button(display,100,480,play_img,200,200)
 bottonepause=Button(display,500,480,pause_img,200,200)
-bottonegameover=Button(display,300,200,gameover_img,600,300)
+bottonegameover=Button(display,0,400,gameover_img,600,300)
 
 
 #creo sfondo
@@ -54,55 +60,63 @@ fnomi=['fragola','ciliegie','limone','mela','banana','arancia','bomba']
 frutta1=Object1(display,sfondo,f'image/{random.choice(fnomi)}.png')
 frutta2=Object2(display,sfondo,f'image/{random.choice(fnomi)}.png')
 frutta3=Object3(display,sfondo,f'image/{random.choice(fnomi)}.png')
+while frutta1.img=='image/bomba.png' and frutta2.img=='image/bomba.png' and frutta3.img=='image/bomba.png':
+    frutta1=Object1(display,sfondo,f'image/{random.choice(fnomi)}.png')
+    frutta2=Object2(display,sfondo,f'image/{random.choice(fnomi)}.png')
+    frutta3=Object3(display,sfondo,f'image/{random.choice(fnomi)}.png')
 
-
-game=1
+menu=False
+game=True
 run=True
 while run:
     clock.tick(60)
-    display.fill((202,228,241))
+    
     #schermata principale
-    if game==1:
-        
+    if game==True:
+        bottonestart=Button(display,160,200,start_img,200,200)
+        bottonequit=Button(display,480,200,quit_img,200,200)
+        display.fill((202,228,241))
         if bottonestart.drawbutton():
-            game=-1
+            game=False
         if bottonequit.drawbutton():
             run=False
     
     
     #avvio del gioco
-    elif game==-1:
+    if game==False:
         
         #disegno sfondo
+        sfondo=Platform(display)
         sfondo.drawsfondo()
-
+        bottonequit=Button(display,0,480,quit_img,200,200)
         
         #creo oggetti che cadono
         
-        while frutta1.moveobj():
+        while frutta1.moveobj() or frutta1.go==True:
             frutta1=Object1(display,sfondo,f'image/{random.choice(fnomi)}.png')
             frutta1.moveobj()
         if frutta1.moveobj()==False and frutta1.bomba==True:
-                if bottonegameover.drawbutton():
-                    game=1
+            if bottonegameover.drawbutton():
+                run=False
+            
             
            
 
-        while frutta2.moveobj():
+        while frutta2.moveobj() or frutta2.go==True :
             frutta2=Object2(display,sfondo,f'image/{random.choice(fnomi)}.png')
             frutta2.moveobj()
             
         if frutta2.moveobj()==False and frutta2.bomba==True:
             if bottonegameover.drawbutton():
-                game=1
+                run=False
             
             
-        while frutta3.moveobj():
+        while frutta3.moveobj() or frutta3.go==True:
             frutta3=Object3(display,sfondo,f'image/{random.choice(fnomi)}.png')
             frutta3.moveobj()  
         if frutta3.moveobj()==False and frutta3.bomba==True:
             if bottonegameover.drawbutton():
-                game=1
+                run=False
                 
              
         frutta1.drawobj()
@@ -111,24 +125,27 @@ while run:
         #controllo quando gli oggetti escono tutti dallo schermo
         if frutta1.rect.y>600 and frutta2.rect.x>800 and frutta3.rect.x<-100:
             if bottonegameover.drawbutton():
-                game=1
+                run=False
+                
+                
             
         #disegno pulsanti pause
         if bottonepause.drawbutton():
-            game=2
+            sfondo=Platform(display)
 
-    #porta al menu:        
-    elif game==2:
-        display.fill((202,228,241))
-        bottonestart=Button(display,300,100,start_img,200,200)
-        bottonequit=Button(display,300,200,quit_img,200,200)
-        bottoneplay=Button(display,300,300,play_img,200,200)
+            #carico oggetti che cadono
+            fnomi=['fragola','ciliegie','limone','mela','banana','arancia','bomba']
+            frutta1=Object1(display,sfondo,f'image/{random.choice(fnomi)}.png')
+            frutta2=Object2(display,sfondo,f'image/{random.choice(fnomi)}.png')
+            frutta3=Object3(display,sfondo,f'image/{random.choice(fnomi)}.png')
+            game=True
         if bottonequit.drawbutton():
-            run=False
-        if bottoneplay.drawbutton():
-            game=-1
-        if bottonestart.drawbutton():
-            game=1
+            run=False  
+
+    
+
+            
+        
 
    
        
@@ -138,6 +155,9 @@ while run:
         if event.type==QUIT:
             pygame.quit()
             sys.exit()
+       
+
+            
         
     surf = pygame.transform.scale(display, window_size)
     screen.blit(surf, (0,0))

@@ -3,7 +3,7 @@ from pygame.locals import*
 import random
 
 class Object1():
-    def __init__(self,display,sfondo,img,bomba=False):
+    def __init__(self,display,sfondo,img,bomba=False,go=False):
         self.img=img
         self.bomba=bomba
         self.display=display
@@ -12,16 +12,16 @@ class Object1():
         self.image=pygame.image.load(self.img)
         self.image = pygame.transform.scale(self.image, (100,100))
         self.rect = pygame.Rect(self.pos[0],self.pos[1], 100, 100)
-      
         self.vel_caduta=0.005
         self.falling=False
+        self.go=go
 
     def moveobj(self):
         self.vel_caduta +=0.007
         self.rect.y += self.vel_caduta
         
         pos = pygame.mouse.get_pos()
-        action=True
+        action=False
         if self.rect.collidepoint(pos):
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 if self.img=='image/bomba.png':
@@ -30,21 +30,25 @@ class Object1():
                 else:
                     action=True
                 self.clicked = True
+        
         else:
-            if self.img=='image/bomba.png':
-                action=True
-
+            if self.rect.y>600:
+                if self.img=='image/bomba.png':
+                    self.go=True
+                else:
+                    self.go=False
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
         return action
-            
+    
+
     def drawobj(self):
         self.display.blit(self.image,self.rect)
 
 
 
 class Object2():
-    def __init__(self,display,sfondo,img,bomba=False):
+    def __init__(self,display,sfondo,img,bomba=False,go=False):
         self.img=img
         self.bomba=bomba
         self.display=display
@@ -56,6 +60,7 @@ class Object2():
       
         self.vel_oriz=0.005
         self.falling=False
+        self.go=go
 
     def moveobj(self):
         self.vel_oriz +=0.005
@@ -63,7 +68,7 @@ class Object2():
         
         pos = pygame.mouse.get_pos()
         
-        action=True
+        action=False
         if self.rect.collidepoint(pos):
             
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
@@ -75,9 +80,16 @@ class Object2():
                 else:
                     action=True
                 self.clicked = True
-
+        else:
+            if self.rect.x>800:
+                if self.img=='image/bomba.png':
+                    self.go=True
+                else:
+                    self.go=False
         if pygame.mouse.get_pressed()[0] == 0:
-            self.clicked = False
+           self.clicked = False
+        
+
             
         return action
             
@@ -91,7 +103,7 @@ class Object2():
 
 
 class Object3():
-    def __init__(self,display,sfondo,img,bomba=False):
+    def __init__(self,display,sfondo,img,bomba=False,go=False):
         self.img=img
         self.bomba=bomba
         self.display=display
@@ -103,13 +115,13 @@ class Object3():
       
         self.vel_oriz=0.005
         self.falling=False
-
+        self.go=go
     def moveobj(self):
         self.vel_oriz +=0.005
         self.rect.x -= self.vel_oriz
         
         pos = pygame.mouse.get_pos()
-        action=True
+        action=False
         if self.rect.collidepoint(pos):
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 if self.img=='image/bomba.png':
@@ -119,8 +131,15 @@ class Object3():
                 else:
                     action=True
                 self.clicked = True
-
+        else:
+            if self.rect.x<-100:
+                if self.img=='image/bomba.png':
+                    self.go=True
+                else:
+                    self.go=False
         if pygame.mouse.get_pressed()[0] == 0:
+           
+            
             self.clicked = False
         return action
             
